@@ -18,14 +18,12 @@ def device_connections():
             futures.append(executor.submit(connect_to_device, device))
         
         for future in futures:
-            print(future)
             connection = future.result()
             print(connection)
+        for device in devices:
             device.pop("password")
             device.pop("username")
-            device_copy = device.copy()
-            device_copy["connection"] = connection
-            connections.append(device_copy)
+            connections.append(device)
     
     yield connections
     

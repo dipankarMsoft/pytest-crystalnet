@@ -8,4 +8,5 @@ def load_device_config(file_path):
 
 def connect_to_device(device):
     connection = ConnectHandler(**device)
-    return connection
+    device['connection'] = connection
+    return device
