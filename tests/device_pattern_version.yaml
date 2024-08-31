@@ -1,3 +1,6 @@
-cisco_xr: "^\s+Version\s+:\s(\S+)\s"
-arista_eos: "^Software image version:\s(\S+)\s"
-juniper_junos: "^Junos:\s(\S+)\s"
+cisco_xr: >
+  ^\s+Version\s+:\s(\S+)\s
+arista_eos: >
+  ^Software image version:\s(\S+)\s
+juniper_junos: >
+  ^Junos:\s(\S+)\s
