@@ -19,7 +19,6 @@ def device_connections():
         
         for future in futures:
             connection = future.result()
-            device = connection.get_device()
             device.pop("password")
             device.pop("username")
             device["connection"] = connection
