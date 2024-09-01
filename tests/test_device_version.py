@@ -3,13 +3,14 @@ import re
 import yaml
 import pytest
 
+device_pattern = {'cisco_xr': 'Version\s+:\s(\S+)\s', 'arista_eos': 'Software image version:\s(\S+)', 'juniper_junos': 'Junos:\s(\S+)'}
+
 def load_device_versions(path):
     with open(path) as file:
         return yaml.safe_load(file)
 
 def test_device_version(device_connections):
     device_versions = load_device_versions(path="tests/device_versions.yaml")
-    device_pattern = load_device_versions(path="tests/device_pattern_version.yaml")
     print(device_pattern)
     for device in device_connections:
         output = device["connection"].send_command("show version")
