@@ -59,6 +59,7 @@ def test_isis_adj_data(device_connections):
             write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
         elif device["device_type"] == "arista_eos":
             matches = re.findall(arista_eos_pattern, output)
+            print(matches)
             neighbor_dict = make_neighbor_dict_arista_eos(matches)
             write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
         elif device["device_type"] == "juniper_junos":
