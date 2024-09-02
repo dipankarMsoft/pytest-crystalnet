@@ -1,0 +1,15 @@
+owr04.mrn20:
+  if_name: Port-Channel1
+  state: UP
+rwa01.brz01:
+  if_name: Port-Channel1013
+  state: UP
+rwa02.brz01:
+  if_name: Port-Channel1012
+  state: UP
+rwa03.brz01:
+  if_name: Port-Channel1011
+  state: UP
+rwa04.brz01:
+  if_name: Port-Channel1010
+  state: UP

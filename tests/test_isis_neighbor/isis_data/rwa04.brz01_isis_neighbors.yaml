@@ -1,0 +1,15 @@
+ier02.brz01:
+  if_name: Port-Channel21
+  state: UP
+owr01.brz01:
+  if_name: Port-Channel1013
+  state: UP
+owr02.brz01:
+  if_name: Port-Channel1012
+  state: UP
+owr03.brz01:
+  if_name: Port-Channel1011
+  state: UP
+owr04.brz01:
+  if_name: Port-Channel1010
+  state: UP

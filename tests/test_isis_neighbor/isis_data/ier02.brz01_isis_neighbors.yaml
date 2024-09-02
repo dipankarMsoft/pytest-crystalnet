@@ -1,0 +1,6 @@
+rwa02.brz01:
+  if_name: ae20.0
+  state: Up
+rwa04.brz01:
+  if_name: ae21.0
+  state: Up

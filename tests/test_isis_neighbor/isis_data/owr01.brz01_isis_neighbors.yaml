@@ -1,0 +1,15 @@
+owr01.mrn20:
+  if_name: BE1
+  state: Up
+rwa01.brz01:
+  if_name: BE1010
+  state: Up
+rwa02.brz01:
+  if_name: BE1011
+  state: Up
+rwa03.brz01:
+  if_name: BE1012
+  state: Up
+rwa04.brz01:
+  if_name: BE1013
+  state: Up

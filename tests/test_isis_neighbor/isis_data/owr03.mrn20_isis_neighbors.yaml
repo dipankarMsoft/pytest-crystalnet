@@ -1,0 +1,3 @@
+owr03.brz01:
+  if_name: Port-Channel1
+  state: UP

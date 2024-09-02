@@ -2,6 +2,8 @@
 import re
 import yaml
 import pytest
+import time
+from jinja2 import Template
 
 
 def load_yaml_file(path):
@@ -56,16 +58,41 @@ def test_isis_adj_data(device_connections):
         if device["device_type"] == "cisco_xr":
             matches = re.findall(cisco_xr_pattern, output)
             neighbor_dict = make_neighbor_dict_cisco_xr(matches)
-            write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
+            # write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
         elif device["device_type"] == "arista_eos":
             matches = re.findall(arista_eos_pattern, output)
             print(matches)
             neighbor_dict = make_neighbor_dict_arista_eos(matches)
-            write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
         elif device["device_type"] == "juniper_junos":
             matches = re.findall(juniper_junos_pattern, output)
             neighbor_dict = make_neighbor_dict_juniper_junos(matches)
-            write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
         print(neighbor_dict)
         for neighbor in expected_isis_neighbor:
             assert neighbor_dict[neighbor]['state'] in ['Up','UP'], f"Expected neighbor {neighbor} state to be Up, but got {neighbor_dict.get(neighbor['state'])}"
+
+def configure_isis_auth(device_connections,action_to_apply):
+    for device in device_connections:
+        print(device)
+        isis_neighbor_data = load_yaml_file(path=f"tests/test_isis_neighbor/isis_data/{device['host']}_isis_neighbors.yaml")
+        print(f'****** {device["host"]}******')
+        print(isis_neighbor_data)
+        template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template.j2").read())
+        config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
+        if device["device_type"] == "juniper_junos":
+            device["connection"].send_config_set(config.splitlines())
+            device["connection"].commit()
+        elif device["device_type"] == "arista_eos":
+            device["connection"].send_config_set(config.splitlines())
+        elif device["device_type"] == "cisco_xr":
+            device["connection"].send_config_set(config.splitlines())
+            device["connection"].commit()
+
+def test_isis_adj_with_auth(device_connections):
+    configure_isis_auth(device_connections,action_to_apply='set')
+    time.sleep(10)
+    test_isis_adj_data(device_connections)
+
+def test_isis_adj_with_auth(device_connections):
+    configure_isis_auth(device_connections,action_to_apply='delete')
+    time.sleep(10)
+    test_isis_adj_data(device_connections)

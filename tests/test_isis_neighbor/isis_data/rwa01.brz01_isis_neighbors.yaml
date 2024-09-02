@@ -1,0 +1,15 @@
+ier01.brz01:
+  if_name: BE20
+  state: Up
+owr01.brz01:
+  if_name: BE1010
+  state: Up
+owr02.brz01:
+  if_name: BE1011
+  state: Up
+owr03.brz01:
+  if_name: BE1012
+  state: Up
+owr04.brz01:
+  if_name: BE1013
+  state: Up

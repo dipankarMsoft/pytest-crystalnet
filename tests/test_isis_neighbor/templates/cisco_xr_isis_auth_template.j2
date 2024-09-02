@@ -1,0 +1,18 @@
+{% if action=='set' %}
+key chain ISIS 
+key chain ISIS key 1 
+key chain ISIS key 1 accept-lifetime 00:00:00 december 01 2014 infinite
+key chain ISIS key 1 key-string password {{database_auth}}
+key chain ISIS key 1 send-lifetime 00:00:00 december 01 2014 infinite
+key chain ISIS key 1 cryptographic-algorithm HMAC-MD5
+router isis 1 lsp-password keychain ISIS level 2
+{% for item in isis_neighbor_data.values() -%}
+router isis 1 interface {{item['if_name']}} hello-password keychain ISIS
+{% endfor %}
+{% else %}
+no key chain ISIS key 1
+no key chain ISIS
+{% for item in isis_neighbor_data.values() -%}
+no router isis 1 interface {{item['if_name']}} hello-password keychain ISIS
+{% endfor %}
+{% endif %}
