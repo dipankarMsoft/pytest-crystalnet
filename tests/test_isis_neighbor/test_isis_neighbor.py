@@ -25,7 +25,7 @@ def make_neighbor_dict_arista_eos(matches):
         system_id = match[0]
         if_name = match[1]
         state = match[2]
-    neighbor_dict[system_id] = {'if_name': if_name, 'state': state}
+        neighbor_dict[system_id] = {'if_name': if_name, 'state': state}
     return neighbor_dict
 
 def make_neighbor_dict_cisco_xr(matches):
