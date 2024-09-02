@@ -45,7 +45,7 @@ def write_dict_to_yaml(dictionary, path):
 def test_isis_adj_data(device_connections):
     isis_neighbor_data = load_yaml_file(path="tests/test_isis_neighbor/expected_isis_neighbors.yaml")
     juniper_junos_pattern = r'(\S+\.\S+)\s+(\w+\.\w+)\s+\S+\s+(\w+)'
-    arista_eos_pattern = r'1\s+default\s+(\w+\.\w+)\s+\S+\s+(\S+)\s+\S+\s+(\w+)'
+    arista_eos_pattern = r'1\s+default\s+(\w+\.\w+)\s+\S+\s+(\S+)\s+P2P\s+(\w+)'
     cisco_xr_pattern = r'(\w+\.\w+)\s+(\w+)\s+\*\w+\*\s+(Up|Down)'
 
     for device in device_connections:
