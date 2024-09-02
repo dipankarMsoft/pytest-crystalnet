@@ -66,18 +66,19 @@ def test_isis_adj_data(device_connections):
         elif device["device_type"] == "juniper_junos":
             matches = re.findall(juniper_junos_pattern, output)
             neighbor_dict = make_neighbor_dict_juniper_junos(matches)
-        print(neighbor_dict)
+        # print(neighbor_dict)
         for neighbor in expected_isis_neighbor:
             assert neighbor_dict[neighbor]['state'] in ['Up','UP'], f"Expected neighbor {neighbor} state to be Up, but got {neighbor_dict.get(neighbor['state'])}"
 
 def configure_isis_auth(device_connections,action_to_apply):
     for device in device_connections:
-        print(device)
+        # print(device)
         isis_neighbor_data = load_yaml_file(path=f"tests/test_isis_neighbor/isis_data/{device['host']}_isis_neighbors.yaml")
         print(f'****** {device["host"]}******')
-        print(isis_neighbor_data)
+        # print(isis_neighbor_data)
         template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template.j2").read())
         config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
+        print(config)
         if device["device_type"] == "juniper_junos":
             device["connection"].send_config_set(config.splitlines())
             device["connection"].commit()
