@@ -50,7 +50,7 @@ def test_isis_adj_data(device_connections):
 
     for device in device_connections:
         output = device["connection"].send_command(isis_command.get(device["device_type"]))
-        print(f'****** device["host"]******')
+        print(f'****** {device["host"]}******')
         print(output)
         expected_isis_neighbor = isis_neighbor_data.get(device["host"])
         if device["device_type"] == "cisco_xr":
@@ -60,6 +60,7 @@ def test_isis_adj_data(device_connections):
         elif device["device_type"] == "arista_eos":
             matches = re.findall(arista_eos_pattern, output)
             neighbor_dict = make_neighbor_dict_arista_eos(matches)
+            print(neighbor_dict)
             write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
         elif device["device_type"] == "juniper_junos":
             matches = re.findall(juniper_junos_pattern, output)
