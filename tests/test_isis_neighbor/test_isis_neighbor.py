@@ -50,6 +50,8 @@ def test_isis_adj_data(device_connections):
 
     for device in device_connections:
         output = device["connection"].send_command(isis_command.get(device["device_type"]))
+        print(f'****** device["host"]******')
+        print(output)
         expected_isis_neighbor = isis_neighbor_data.get(device["host"])
         if device["device_type"] == "cisco_xr":
             matches = re.findall(cisco_xr_pattern, output)
