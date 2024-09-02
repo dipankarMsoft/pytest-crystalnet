@@ -17,8 +17,8 @@ def test_isis_adj_data(device_connections):
         expected_isis_neighbor = isis_neighbor_data.get(device["host"])
         for neighbor in expected_isis_neighbor:
             if neighbor in output:
-                print(f"{device["host"]} :-- Expected neighbor {neighbor} found")
+                print(f"{device['host']} :-- Expected neighbor {neighbor} found")
             else:
-                print(f"{device["host"]} :-- Expected neighbor {neighbor} not found")
+                print(f"{device['host']} :-- Expected neighbor {neighbor} not found")
         for neighbor in expected_isis_neighbor:
             assert neighbor in output, f"Expected neighbor {neighbor}, but got {output}"
