@@ -34,5 +34,6 @@ def test_isis_adj_data(device_connections):
         elif device["device_type"] == "juniper_junos":
             matches = re.findall(juniper_junos_pattern, output)
             neighbor_dict = make_neighbor_dict(matches)
+        print(neighbor_dict)
         for neighbor in expected_isis_neighbor:
             assert neighbor_dict.get(neighbor) in ['Up','UP'], f"Expected neighbor {neighbor} state to be Up, but got {neighbor_dict.get(neighbor)}"
