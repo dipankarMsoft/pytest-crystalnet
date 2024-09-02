@@ -65,4 +65,4 @@ def test_isis_adj_data(device_connections):
             write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
         print(neighbor_dict)
         for neighbor in expected_isis_neighbor:
-            assert neighbor_dict.get(neighbor['state']) in ['Up','UP'], f"Expected neighbor {neighbor} state to be Up, but got {neighbor_dict.get(neighbor['state'])}"
+            assert neighbor_dict[neighbor]['state'] in ['Up','UP'], f"Expected neighbor {neighbor} state to be Up, but got {neighbor_dict.get(neighbor['state'])}"
