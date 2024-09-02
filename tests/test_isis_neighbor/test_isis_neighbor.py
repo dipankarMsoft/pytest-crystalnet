@@ -45,7 +45,7 @@ def write_dict_to_yaml(dictionary, path):
 def test_isis_adj_data(device_connections):
     isis_neighbor_data = load_yaml_file(path="tests/test_isis_neighbor/expected_isis_neighbors.yaml")
     juniper_junos_pattern = r'(\S+\.\S+)\s+(\w+\.\w+)\s+\S+\s+(\w+)'
-    arista_eos_pattern = r'\d+\s+\S+\s+(\w+\.\w+)\s+\S+\s+(\S+)\s+\S+\s+(\w+)'
+    arista_eos_pattern = r'1\s+default\s+(\w+\.\w+)\s+\S+\s+(\S+)\s+\S+\s+(\w+)'
     cisco_xr_pattern = r'(\w+\.\w+)\s+(\w+)\s+\*\w+\*\s+(Up|Down)'
 
     for device in device_connections:
@@ -60,7 +60,6 @@ def test_isis_adj_data(device_connections):
         elif device["device_type"] == "arista_eos":
             matches = re.findall(arista_eos_pattern, output)
             neighbor_dict = make_neighbor_dict_arista_eos(matches)
-            print(neighbor_dict)
             write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
         elif device["device_type"] == "juniper_junos":
             matches = re.findall(juniper_junos_pattern, output)
