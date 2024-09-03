@@ -94,6 +94,7 @@ def configure_isis_auth(device_connections,action_to_apply):
         elif device["device_type"] == "cisco_xr":
             device["connection"].send_config_set(config.splitlines())
             device["connection"].commit()
+            device["connection"].exit_config_mode()
             print("**** verify the config on the device ****")
             print(device["connection"].send_command("show run formal | include ISIS"))
 
