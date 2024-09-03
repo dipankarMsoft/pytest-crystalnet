@@ -83,11 +83,12 @@ def configure_isis_auth(device_connections,action_to_apply):
         if device["device_type"] == "juniper_junos":
             device["connection"].send_config_set(config.splitlines())
             device["connection"].commit()  # Use the commit method with a comment
-            device["connection"].save()  # Save the configuration to persist the changes
+            device["connection"].save_config()  # Save the configuration to persist the changes
             print("**** verify the config on the device ****")
             print(device["connection"].send_command("show configuration | display set | match isis | match auth"))
         elif device["device_type"] == "arista_eos":
             device["connection"].send_config_set(config.splitlines())
+            device["connection"].save_config()  # Save the configuration to persist the changes
             print("**** verify the config on the device ****")
             print(device["connection"].send_command("show run sec isis | include auth"))
         elif device["device_type"] == "cisco_xr":
