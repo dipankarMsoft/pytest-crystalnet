@@ -82,18 +82,21 @@ def configure_isis_auth(device_connections,action_to_apply):
         if device["device_type"] == "juniper_junos":
             device["connection"].send_config_set(config.splitlines())
             device["connection"].commit()
+            print("**** verify the config on the device ****")
             print(device["connection"].send_command("show configuration | display set | match isis | match auth"))
         elif device["device_type"] == "arista_eos":
             device["connection"].send_config_set(config.splitlines())
+            print("**** verify the config on the device ****")
             print(device["connection"].send_command("show run sec isis | include auth"))
         elif device["device_type"] == "cisco_xr":
             device["connection"].send_config_set(config.splitlines())
             device["connection"].commit()
+            print("**** verify the config on the device ****")
             print(device["connection"].send_command("show run formal | include ISIS"))
 
 def test_isis_adj_with_auth(device_connections):
     configure_isis_auth(device_connections,action_to_apply='set')
-    time.sleep(10)
+    time.sleep(20)
     test_isis_adj_data(device_connections)
 
 def test_isis_adj_without_auth(device_connections):
