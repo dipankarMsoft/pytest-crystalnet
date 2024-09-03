@@ -99,10 +99,10 @@ def configure_isis_auth(device_connections,action_to_apply):
 
 def test_isis_adj_with_auth(device_connections):
     configure_isis_auth(device_connections,action_to_apply='set')
-    time.sleep(20)
+    time.sleep(40)
     test_isis_adj_data(device_connections)
 
 # def test_isis_adj_without_auth(device_connections):
 #     configure_isis_auth(device_connections,action_to_apply='delete')
-#     time.sleep(10)
+#     time.sleep(40)
 #     test_isis_adj_data(device_connections)
