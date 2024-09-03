@@ -10,7 +10,6 @@ router isis 1 lsp-password keychain ISIS level 2
 router isis 1 interface {{item['if_name']}} hello-password keychain ISIS
 {% endfor %}
 {% else %}
-no key chain ISIS key 1
 no key chain ISIS
 {% for item in isis_neighbor_data.values() -%}
 no router isis 1 interface {{item['if_name']}} hello-password keychain ISIS
