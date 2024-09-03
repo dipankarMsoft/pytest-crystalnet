@@ -83,9 +83,8 @@ def configure_isis_auth(device_connections,action_to_apply):
         if device["device_type"] == "juniper_junos":
             device["connection"].send_config_set(config.splitlines())
             device["connection"].commit()  # Use the commit method with a comment
-            device["connection"].save_config()  # Save the configuration to persist the changes
             print("**** verify the config on the device ****")
-            print(device["connection"].send_command("show configuration | display set | match isis | match auth"))
+            print(device["connection"].send_command("show configuration | display set | match isis "))
         elif device["device_type"] == "arista_eos":
             device["connection"].send_config_set(config.splitlines())
             device["connection"].save_config()  # Save the configuration to persist the changes
