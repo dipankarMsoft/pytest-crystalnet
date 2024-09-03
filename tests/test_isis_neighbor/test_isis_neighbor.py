@@ -61,7 +61,6 @@ def test_isis_adj_data(device_connections):
             # write_dict_to_yaml(neighbor_dict, f"{device['host']}_isis_neighbors.yaml")
         elif device["device_type"] == "arista_eos":
             matches = re.findall(arista_eos_pattern, output)
-            print(matches)
             neighbor_dict = make_neighbor_dict_arista_eos(matches)
         elif device["device_type"] == "juniper_junos":
             matches = re.findall(juniper_junos_pattern, output)
@@ -70,14 +69,17 @@ def test_isis_adj_data(device_connections):
         for neighbor in expected_isis_neighbor:
             assert neighbor_dict[neighbor]['state'] in ['Up','UP'], f"Expected neighbor {neighbor} state to be Up, but got {neighbor_dict.get(neighbor['state'])}"
 
-def configure_isis_auth(device_connections,action_to_apply):
+def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
     for device in device_connections:
         # print(device)
         isis_neighbor_data = load_yaml_file(path=f"tests/test_isis_neighbor/isis_data/{device['host']}_isis_neighbors.yaml")
         print(f'****** {device["host"]}******')
-        # print(isis_neighbor_data)
-        template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template.j2").read())
-        config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
+        if no_of_keys == 1:
+            template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template.j2").read())
+            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
+        elif no_of_keys == 2:
+            template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template_2keys.j2").read())
+            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='1234', action=action_to_apply)
         print("**** config to be applied ****")
         print(config)
         if device["device_type"] == "juniper_junos":
@@ -98,12 +100,22 @@ def configure_isis_auth(device_connections,action_to_apply):
             print("**** verify the config on the device ****")
             print(device["connection"].send_command("show run formal | include ISIS"))
 
-def test_isis_adj_with_auth(device_connections):
-    configure_isis_auth(device_connections,action_to_apply='set')
+# def test_isis_adj_with_auth(device_connections):
+#     configure_isis_auth(device_connections,action_to_apply='set',no_of_keys=1)
+#     time.sleep(40)
+#     test_isis_adj_data(device_connections)
+
+# def test_isis_adj_without_auth(device_connections):
+#     configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=1)
+#     time.sleep(40)
+#     test_isis_adj_data(device_connections)
+
+def test_isis_adj_with_database_adj_auth(device_connections):
+    configure_isis_auth(device_connections,action_to_apply='set',no_of_keys=2)
     time.sleep(40)
     test_isis_adj_data(device_connections)
 
-def test_isis_adj_without_auth(device_connections):
-    configure_isis_auth(device_connections,action_to_apply='delete')
+def test_isis_adj_without_database_adj_auth(device_connections):
+    configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=2)
     time.sleep(40)
     test_isis_adj_data(device_connections)

@@ -1,0 +1,16 @@
+{% if action=='set' %}
+set groups default_isis_setup protocols isis level <*> authentication-key {{database_auth}}
+set groups default_isis_setup protocols isis level <*> authentication-type md5
+set groups default_isis_setup protocols isis level <*> prefix-export-limit 5000
+set protocols isis apply-groups default_isis_setup
+{% for item in isis_neighbor_data.values() -%}
+set protocols isis interface {{item['if_name']}} level 2 hello-authentication-key {{item['adj_auth']}}
+{% endfor %}
+{% else %}
+delete groups default_isis_setup protocols isis level <*> authentication-key
+delete groups default_isis_setup protocols isis level <*> authentication-type md5
+delete groups default_isis_setup protocols isis level <*> prefix-export-limit 5000
+{% for item in isis_neighbor_data.values() -%}
+delete protocols isis interface {{item['if_name']}} level 2 hello-authentication-key {{item['adj_auth']}}
+{% endfor %}
+{% endif %}

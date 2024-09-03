@@ -1,0 +1,19 @@
+{% if action=='set' %}
+router isis 1
+   authentication mode md5
+   authentication key {{database_auth}} level-2
+{% for item in isis_neighbor_data.values() -%}
+interface {{item.if_name}}
+   isis authentication mode md5 level-2
+   isis authentication key {{adj_auth}} level-2
+{% endfor %}
+{% else %}
+router isis 1
+   no authentication mode md5
+   no authentication key {{database_auth}} level-2
+{% for item in isis_neighbor_data.values() -%}
+interface {{item.if_name}}
+   no isis authentication mode
+   no isis authentication key {{adj_auth}} level-2
+{% endfor %}
+{% endif %}
