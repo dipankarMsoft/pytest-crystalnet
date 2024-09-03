@@ -78,10 +78,12 @@ def configure_isis_auth(device_connections,action_to_apply):
         # print(isis_neighbor_data)
         template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template.j2").read())
         config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
+        print("**** config to be applied ****")
         print(config)
         if device["device_type"] == "juniper_junos":
             device["connection"].send_config_set(config.splitlines())
-            device["connection"].commit()
+            device["connection"].commit()  # Use the commit method with a comment
+            device["connection"].save()  # Save the configuration to persist the changes
             print("**** verify the config on the device ****")
             print(device["connection"].send_command("show configuration | display set | match isis | match auth"))
         elif device["device_type"] == "arista_eos":
