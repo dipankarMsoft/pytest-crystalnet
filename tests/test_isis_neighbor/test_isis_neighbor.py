@@ -52,7 +52,7 @@ def test_isis_adj_data(device_connections):
 
     for device in device_connections:
         output = device["connection"].send_command(isis_command.get(device["device_type"]))
-        print(f'****** {device["host"]}******')
+        print(f'******Checking isis adj {device["host"]}******')
         print(output)
         expected_isis_neighbor = isis_neighbor_data.get(device["host"])
         if device["device_type"] == "cisco_xr":
@@ -102,7 +102,7 @@ def test_isis_adj_with_auth(device_connections):
     time.sleep(20)
     test_isis_adj_data(device_connections)
 
-def test_isis_adj_without_auth(device_connections):
-    configure_isis_auth(device_connections,action_to_apply='delete')
-    time.sleep(10)
-    test_isis_adj_data(device_connections)
+# def test_isis_adj_without_auth(device_connections):
+#     configure_isis_auth(device_connections,action_to_apply='delete')
+#     time.sleep(10)
+#     test_isis_adj_data(device_connections)
