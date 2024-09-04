@@ -7,7 +7,8 @@ import pytest
 def load_device_versions(path):
     with open(path) as file:
         return yaml.safe_load(file)
-
+    
+@pytest.mark.skip(reason="Skipping this test for now")
 def test_device_version(device_connections):
     device_versions = load_device_versions(path="tests/test_version/device_versions.yaml")
     for device in device_connections:

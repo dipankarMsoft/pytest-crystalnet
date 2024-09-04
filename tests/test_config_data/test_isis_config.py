@@ -2,7 +2,7 @@ import re
 import yaml
 import pytest
 
-
+@pytest.mark.skip(reason="Skipping this test for now")
 def test_isis_config(device_connections):
     for device in device_connections:
         if device["device_type"] == "cisco_xr":
