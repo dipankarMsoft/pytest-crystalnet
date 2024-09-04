@@ -17,6 +17,7 @@ def test_ipv4_ping(device_connections):
                 if Local_ip != Remote_ip:
                     print(f"Remote node : {remote_node} ping {Remote_ip} source {Local_ip}")
                     output = device["connection"].send_command(f"ping {Remote_ip} source {Local_ip} count 5 interval .1")
+                    print(f"\noutput\n")
                     assert re.search(r"5 packets transmitted, 5 packets received, 0% packet loss", output, re.MULTILINE), f"Ping is not success: {output}"
                 else:
                     pass
@@ -32,6 +33,7 @@ def test_ipv6_ping(device_connections):
                 if Local_ip != Remote_ip:
                     print(f"Remote node : {remote_node} ping {Remote_ip} source {Local_ip}")
                     output = device["connection"].send_command(f"ping {Remote_ip} source {Local_ip} count 5 interval .1")
+                    print(f"\noutput\n")
                     assert re.search(r"5 packets transmitted, 5 packets received, 0% packet loss", output, re.MULTILINE), f"Ping is not success: {output}"
                 else:
                     pass
