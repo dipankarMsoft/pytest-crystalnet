@@ -100,7 +100,7 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
             device["connection"].exit_config_mode()
             print("**** verify the config on the device ****")
             print(device["connection"].send_command("show run formal | include ISIS"))
-            
+
 @pytest.mark.skip(reason="Skipping this test for now")
 def test_ipv4_ping(device_connections):
     IPv4_loopback = load_yaml_file(path="tests/test_isis_neighbor/ipv4_loopback.yaml")
@@ -135,27 +135,32 @@ def test_ipv6_ping(device_connections):
         else:
             pass 
 
-# def test_isis_adj_with_auth(device_connections):
-#     configure_isis_auth(device_connections,action_to_apply='set',no_of_keys=1)
-#     time.sleep(40)
-#     test_isis_adj_data(device_connections)
-#    test_ipv4_ping(device_connections)
+
+@pytest.mark.run(order=1)
+def test_isis_adj_with_auth(device_connections):
+    configure_isis_auth(device_connections,action_to_apply='set',no_of_keys=1)
+    print("Waiting for 40 seconds for isis adj to come up")
+    time.sleep(40)
+    test_isis_adj_data(device_connections)
+    test_ipv4_ping(device_connections)
 
 # def test_isis_adj_without_auth(device_connections):
 #     configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=1)
 #     time.sleep(40)
 #     test_isis_adj_data(device_connections)
 #    test_ipv4_ping(device_connections)
-@pytest.mark.run(order=1)
+@pytest.mark.run(order=2)
 def test_isis_adj_with_database_adj_auth(device_connections):
     configure_isis_auth(device_connections,action_to_apply='set',no_of_keys=2)
+    print("Waiting for 40 seconds for isis adj to come up")
     time.sleep(40)
     test_isis_adj_data(device_connections)
     test_ipv4_ping(device_connections)
 
-@pytest.mark.run(order=2)
+@pytest.mark.run(order=3)
 def test_isis_adj_without_database_adj_auth(device_connections):
     configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=2)
+    print("Waiting for 40 seconds for isis adj to come up")
     time.sleep(40)
     test_isis_adj_data(device_connections)
     test_ipv4_ping(device_connections)
