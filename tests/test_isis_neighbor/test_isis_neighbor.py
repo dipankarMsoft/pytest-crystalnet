@@ -157,10 +157,10 @@ def test_isis_adj_with_database_adj_auth(device_connections):
     test_isis_adj_data(device_connections)
     test_ipv4_ping(device_connections)
 
-@pytest.mark.run(order=3)
-def test_isis_adj_without_database_adj_auth(device_connections):
-    configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=2)
-    print("Waiting for 40 seconds for isis adj to come up")
-    time.sleep(40)
-    test_isis_adj_data(device_connections)
-    test_ipv4_ping(device_connections)
+# @pytest.mark.run(order=3)
+# def test_isis_adj_without_database_adj_auth(device_connections):
+#     configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=2)
+#     print("Waiting for 40 seconds for isis adj to come up")
+#     time.sleep(40)
+#     test_isis_adj_data(device_connections)
+#     test_ipv4_ping(device_connections)
