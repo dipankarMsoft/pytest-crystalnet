@@ -81,6 +81,9 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
         elif no_of_keys == 2:
             template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template_2keys.j2").read())
             config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='1234', action=action_to_apply)
+        elif no_of_keys == 'keychain':
+            template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template_keychain.j2").read())
+            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
         print("**** config to be applied ****")
         print(config)
         if device["device_type"] == "juniper_junos":
@@ -159,8 +162,17 @@ def test_ipv6_ping(device_connections):
 
 @pytest.mark.run(order=3)
 def test_isis_adj_without_database_adj_auth(device_connections):
-    configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=2)
+    configure_isis_auth(device_connections,action_to_apply='set',no_of_keys="keychain")
     print("Waiting for 40 seconds for isis adj to come up")
     time.sleep(40)
     test_isis_adj_data(device_connections)
     test_ipv4_ping(device_connections)
+
+@pytest.mark.run(order=4)
+def test_isis_adj_without_database_adj_auth(device_connections):
+    configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys="keychain")
+    print("Waiting for 40 seconds for isis adj to come up")
+    time.sleep(40)
+    test_isis_adj_data(device_connections)
+    test_ipv4_ping(device_connections)
+

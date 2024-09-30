@@ -1,0 +1,21 @@
+{% if action=='set' %}
+management security
+   session shared-secret profile ISIS
+   secret 0 {{database_auth}} receive-lifetime infinite transmit-lifetime infinite
+router isis 1
+   authentication mode shared-secret profile ISIS algorithm md5
+{% for item in isis_neighbor_data.values() -%}
+interface {{item.if_name}}
+   isis authentication mode shared-secret profile ISIS algorithm md5
+{% endfor %}
+{% else %}
+management security
+   no session shared-secret profile ISIS
+   no secret 0
+router isis 1
+   no authentication mode shared-secret profile ISIS algorithm md5
+{% for item in isis_neighbor_data.values() -%}
+interface {{item.if_name}}
+   no isis authentication mode shared-secret profile ISIS algorithm md5
+{% endfor %}
+{% endif %}
