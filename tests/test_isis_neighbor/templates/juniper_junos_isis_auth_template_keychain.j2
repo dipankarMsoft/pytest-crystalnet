@@ -4,8 +4,6 @@ set security authentication-key-chains key-chain ISIS key 0 start-time "2011-1-1
 set security authentication-key-chains key-chain ISIS key 0 algorithm md5
 set protocols isis level 2 authentication-key-chain ISIS
 {% else %}
-delete security authentication-key-chains key-chain ISIS key 0 secret {{database_auth}}
-delete security authentication-key-chains key-chain ISIS key 0 start-time "2011-1-1.00:00:00 +0000"
-delete security authentication-key-chains key-chain ISIS key 0 algorithm md5
+delete security authentication-key-chains key-chain ISIS key 0
 delete protocols isis level 2 authentication-key-chain ISIS
 {% endif %}
