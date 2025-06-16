@@ -77,7 +77,12 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
         print(f'****** {device["host"]}******')
         if no_of_keys == 1:
             template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template.j2").read())
-            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
+            if device["device_type"] == "juniper_junos":
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
+            elif device["device_type"] == "arista_eos":
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='020706580F', adj_auth='020706580F', action=action_to_apply)
+            elif device["device_type"] == "cisco_xr":         
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='104F0B1A01', adj_auth='104F0B1A01', action=action_to_apply)
         elif no_of_keys == 2:
             template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template_2keys.j2").read())
             config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='1234', action=action_to_apply)
