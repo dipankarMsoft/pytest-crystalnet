@@ -80,7 +80,7 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
             if device["device_type"] == "juniper_junos":
                 config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
             elif device["device_type"] == "arista_eos":
-                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='020706580F', adj_auth='020706580F', action=action_to_apply)
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='y+hKVbM2ADc=', adj_auth='y+hKVbM2ADc=', action=action_to_apply)
             elif device["device_type"] == "cisco_xr":         
                 config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='104F0B1A01', adj_auth='104F0B1A01', action=action_to_apply)
         elif no_of_keys == 2:
