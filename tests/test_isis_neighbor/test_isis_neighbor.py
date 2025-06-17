@@ -78,11 +78,11 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
         if no_of_keys == 1:
             template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template.j2").read())
             if device["device_type"] == "juniper_junos":
-                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='$9$OWPO1IcrlMXxdtu', adj_auth='$9$OWPO1IcrlMXxdtu', action=action_to_apply)
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='$9$-Fbw2UjH5TFiHPQzFtp8X7dgJ', adj_auth='$9$-Fbw2UjH5TFiHPQzFtp8X7dgJ', action=action_to_apply)
             elif device["device_type"] == "arista_eos":
-                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='y+hKVbM2ADc=', adj_auth='y+hKVbM2ADc=', action=action_to_apply)
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='Gi85t/fBDZDYb3AXPFqdHQ==', adj_auth='Gi85t/fBDZDYb3AXPFqdHQ==', action=action_to_apply)
             elif device["device_type"] == "cisco_xr":         
-                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='104F0B1A01', adj_auth='104F0B1A01', action=action_to_apply)
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='0224537D5F021F3256', adj_auth='0224537D5F021F3256', action=action_to_apply)
         elif no_of_keys == 2:
             template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template_2keys.j2").read())
             config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='1234', action=action_to_apply)
@@ -144,20 +144,20 @@ def test_ipv6_ping(device_connections):
             pass 
 
 
-@pytest.mark.run(order=1)
-def test_isis_adj_with_auth(device_connections):
-    configure_isis_auth(device_connections,action_to_apply='set',no_of_keys=1)
-    print("Waiting for 40 seconds for isis adj to come up")
-    time.sleep(40)
-    test_isis_adj_data(device_connections)
-    test_ipv4_ping(device_connections)
-
 # @pytest.mark.run(order=1)
-# def test_isis_adj_without_auth(device_connections):
-#     configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=1)
+# def test_isis_adj_with_auth(device_connections):
+#     configure_isis_auth(device_connections,action_to_apply='set',no_of_keys=1)
+#     print("Waiting for 40 seconds for isis adj to come up")
 #     time.sleep(40)
 #     test_isis_adj_data(device_connections)
 #     test_ipv4_ping(device_connections)
+
+@pytest.mark.run(order=1)
+def test_isis_adj_without_auth(device_connections):
+    configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=1)
+    time.sleep(40)
+    test_isis_adj_data(device_connections)
+    test_ipv4_ping(device_connections)
 
 # @pytest.mark.run(order=2)
 # def test_isis_adj_with_database_adj_auth(device_connections):
