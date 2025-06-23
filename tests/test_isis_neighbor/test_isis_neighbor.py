@@ -98,7 +98,6 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
             print("**** verify the config on the device ****")
             print(device["connection"].send_command("show configuration | display set | match isis "))
         elif device["device_type"] == "arista_eos":
-            print(f"Config that will be applied: {config.splitlines()}")
             device["connection"].send_config_set(config.splitlines())
             device["connection"].save_config()  # Save the configuration to persist the changes
             print("**** verify the config on the device ****")

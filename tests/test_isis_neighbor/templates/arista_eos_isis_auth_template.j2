@@ -9,11 +9,11 @@ interface {{item.if_name}}
 {% endfor %}
 {% else %}
 router isis 1
-   no authentication mode md5
+   no authentication mode md5 level-2
    no authentication key 7 {{database_auth}} level-2
 {% for item in isis_neighbor_data.values() -%}
 interface {{item.if_name}}
-   no isis authentication mode
+   no isis authentication mode md5 level-2
    no isis authentication key 7 {{adj_auth}} level-2
 {% endfor %}
 {% endif %}
