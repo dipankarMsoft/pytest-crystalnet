@@ -80,7 +80,7 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
             if device["device_type"] == "juniper_junos":
                 config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='$9$-Fbw2UjH5TFiHPQzFtp8X7dgJ', adj_auth='$9$-Fbw2UjH5TFiHPQzFtp8X7dgJ', action=action_to_apply)
             elif device["device_type"] == "arista_eos":
-                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='auth ', adj_auth='s3Q1jJQyK8/pWqwj0mBukQ==', action=action_to_apply)
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='s3Q1jJQyK8/pWqwj0mBukQ==', adj_auth='s3Q1jJQyK8/pWqwj0mBukQ==', action=action_to_apply)
             elif device["device_type"] == "cisco_xr":         
                 config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='0224537D5F021F3256', adj_auth='0224537D5F021F3256', action=action_to_apply)
         elif no_of_keys == 2:
@@ -98,6 +98,7 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
             print("**** verify the config on the device ****")
             print(device["connection"].send_command("show configuration | display set | match isis "))
         elif device["device_type"] == "arista_eos":
+            print(f"Config that will be applied: {config.splitlines()}")
             device["connection"].send_config_set(config.splitlines())
             device["connection"].save_config()  # Save the configuration to persist the changes
             print("**** verify the config on the device ****")
