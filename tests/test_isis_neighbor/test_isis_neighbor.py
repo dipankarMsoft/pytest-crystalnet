@@ -83,12 +83,54 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
                 config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='Gi85t/fBDZDYb3AXPFqdHQ==', adj_auth='Gi85t/fBDZDYb3AXPFqdHQ==', action=action_to_apply)
             elif device["device_type"] == "cisco_xr":         
                 config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='0224537D5F021F3256', adj_auth='0224537D5F021F3256', action=action_to_apply)
+
+            if device["device_type"] == "juniper_junos":
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='$9$r0SvWXbw2aGjVbmTzF/9KM87dwsY4aUH', adj_auth='$9$r0SvWXbw2aGjVbmTzF/9KM87dwsY4aUH', action=action_to_apply)
+            elif device["device_type"] == "arista_eos":
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='hlUe7SXlf/B9BDRfOVCcmg==', adj_auth='hlUe7SXlf/B9BDRfOVCcmg==', action=action_to_apply)
+            elif device["device_type"] == "cisco_xr":         
+                config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='047C2D355E321D5D22391C', adj_auth='047C2D355E321D5D22391C', action=action_to_apply)
         elif no_of_keys == 2:
             template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template_2keys.j2").read())
             config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='1234', action=action_to_apply)
         elif no_of_keys == 'keychain':
             template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_auth_template_keychain.j2").read())
             config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth='abcd', adj_auth='abcd', action=action_to_apply)
+        print("**** config to be applied ****")
+        print(config)
+        if device["device_type"] == "juniper_junos":
+            device["connection"].send_config_set(config.splitlines())
+            device["connection"].commit()  # Use the commit method with a comment
+            device["connection"].exit_config_mode()
+            print("**** verify the config on the device ****")
+            print(device["connection"].send_command("show configuration | display set | match isis "))
+        elif device["device_type"] == "arista_eos":
+            device["connection"].send_config_set(config.splitlines())
+            device["connection"].save_config()  # Save the configuration to persist the changes
+            print("**** verify the config on the device ****")
+            print(device["connection"].send_command("show run sec isis | include auth"))
+        elif device["device_type"] == "cisco_xr":
+            device["connection"].send_config_set(config.splitlines())
+            device["connection"].commit()
+            device["connection"].exit_config_mode()
+            print("**** verify the config on the device ****")
+            print(device["connection"].send_command("show run formal | include ISIS"))
+
+def rotate_isis_auth(device_connections):
+    for device in device_connections:
+        # print(device)
+        isis_neighbor_data = load_yaml_file(path=f"tests/test_isis_neighbor/isis_data/{device['host']}_isis_neighbors.yaml")
+        print(f'****** {device["host"]}******')
+        print(device_connections.auth_vars)
+        input("press enter to continue")
+
+        template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_Key1_to_Key2.j2").read())
+        if device["device_type"] == "juniper_junos":
+            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth_old=device_connections.auth_vars.jnpr_database_auth_old, database_auth_new=device_connections.auth_vars.jnpr_database_auth_new)
+        elif device["device_type"] == "arista_eos":
+            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth_old=device_connections.auth_vars.eos_database_auth_old, database_auth_new=device_connections.auth_vars.eos_database_auth_new)
+        elif device["device_type"] == "cisco_xr":         
+            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth_old=device_connections.auth_vars.xr_database_auth_old, database_auth_new=device_connections.auth_vars.xr_database_auth_new)
         print("**** config to be applied ****")
         print(config)
         if device["device_type"] == "juniper_junos":
@@ -143,21 +185,29 @@ def test_ipv6_ping(device_connections):
         else:
             pass 
 
-
 @pytest.mark.run(order=1)
-def test_isis_adj_with_auth(device_connections):
-    configure_isis_auth(device_connections,action_to_apply='set',no_of_keys=1)
+def test_isis_adj_rotation(device_connections):
+    rotate_isis_auth(device_connections,)
     print("Waiting for 40 seconds for isis adj to come up")
     time.sleep(40)
     test_isis_adj_data(device_connections)
     test_ipv4_ping(device_connections)
 
-@pytest.mark.run(order=2)
-def test_isis_adj_without_auth(device_connections):
-    configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=1)
-    time.sleep(40)
-    test_isis_adj_data(device_connections)
-    test_ipv4_ping(device_connections)
+
+# @pytest.mark.run(order=1)
+# def test_isis_adj_with_auth(device_connections):
+#     configure_isis_auth(device_connections,action_to_apply='set',no_of_keys=1)
+#     print("Waiting for 40 seconds for isis adj to come up")
+#     time.sleep(40)
+#     test_isis_adj_data(device_connections)
+#     test_ipv4_ping(device_connections)
+
+# @pytest.mark.run(order=2)
+# def test_isis_adj_without_auth(device_connections):
+#     configure_isis_auth(device_connections,action_to_apply='delete',no_of_keys=1)
+#     time.sleep(40)
+#     test_isis_adj_data(device_connections)
+#     test_ipv4_ping(device_connections)
 
 # @pytest.mark.run(order=2)
 # def test_isis_adj_with_database_adj_auth(device_connections):
