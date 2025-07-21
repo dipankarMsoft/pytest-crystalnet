@@ -134,7 +134,7 @@ def rotate_isis_auth(device_connections):
         print(f'****** {device["host"]}******')
         print(auth_vars)
         print(auth_vars['jnpr_database_auth_old'])
-        input("press enter to continue")
+        input("press enter to continue-")
 
         template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_Key1_to_Key2.j2").read())
         if device["device_type"] == "juniper_junos":
