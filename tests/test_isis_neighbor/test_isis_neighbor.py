@@ -133,16 +133,16 @@ def rotate_isis_auth(device_connections):
         isis_neighbor_data = load_yaml_file(path=f"tests/test_isis_neighbor/isis_data/{device['host']}_isis_neighbors.yaml")
         print(f'****** {device["host"]}******')
         print(auth_vars)
-        print(auth_vars.jnpr_database_auth_old)
+        print(auth_vars['jnpr_database_auth_old'])
         input("press enter to continue")
 
         template = Template(open(f"tests/test_isis_neighbor/templates/{device['device_type']}_isis_Key1_to_Key2.j2").read())
         if device["device_type"] == "juniper_junos":
-            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth_old=auth_vars.jnpr_database_auth_old, database_auth_new=auth_vars.jnpr_database_auth_new)
+            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth_old=auth_vars['jnpr_database_auth_old'], database_auth_new=auth_vars['jnpr_database_auth_new'])
         elif device["device_type"] == "arista_eos":
-            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth_old=auth_vars.eos_database_auth_old, database_auth_new=auth_vars.eos_database_auth_new)
+            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth_old=auth_vars['eos_database_auth_old'], database_auth_new=auth_vars['eos_database_auth_new'])
         elif device["device_type"] == "cisco_xr":         
-            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth_old=auth_vars.xr_database_auth_old, database_auth_new=auth_vars.xr_database_auth_new)
+            config = template.render(isis_neighbor_data=isis_neighbor_data, database_auth_old=auth_vars['xr_database_auth_old'], database_auth_new=auth_vars['xr_database_auth_new'])
         print("**** config to be applied ****")
         print(config)
         if device["device_type"] == "juniper_junos":
