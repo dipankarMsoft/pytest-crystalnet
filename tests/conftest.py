@@ -4,7 +4,6 @@ from src.device_connector import load_device_config, connect_to_device
 from concurrent.futures import ThreadPoolExecutor
 
 
-print("Auth variables loaded from environment:", auth_vars)
 
 @pytest.fixture(scope="module")
 def device_connections():

@@ -13,14 +13,7 @@ def load_yaml_file(path):
     
 isis_command = {'cisco_xr': 'show isis neighbors', 'arista_eos': 'show isis neighbors', 'juniper_junos': 'show isis adjacency'}
 
-auth_vars = {
-    "xr_database_auth_old": os.getenv('XR_DATABASE_AUTH_OLD'),
-    "xr_database_auth_new": os.getenv('XR_DATABASE_AUTH_NEW'),
-    "eos_database_auth_old": os.getenv('EOS_DATABASE_AUTH_OLD'),
-    "eos_database_auth_new": os.getenv('EOS_DATABASE_AUTH_NEW'),
-    "jnpr_database_auth_old": os.getenv('JNPR_DATABASE_AUTH_OLD'),
-    "jnpr_database_auth_new": os.getenv('JNPR_DATABASE_AUTH_NEW'),
-}
+
 
 def make_neighbor_dict_juniper_junos(matches):
     neighbor_dict = {}
@@ -127,6 +120,14 @@ def configure_isis_auth(device_connections,action_to_apply,no_of_keys=1):
             print(device["connection"].send_command("show run formal | include ISIS"))
 
 def rotate_isis_auth(device_connections):
+    auth_vars = {
+        "xr_database_auth_old": os.getenv('XR_DATABASE_AUTH_OLD'),
+        "xr_database_auth_new": os.getenv('XR_DATABASE_AUTH_NEW'),
+        "eos_database_auth_old": os.getenv('EOS_DATABASE_AUTH_OLD'),
+        "eos_database_auth_new": os.getenv('EOS_DATABASE_AUTH_NEW'),
+        "jnpr_database_auth_old": os.getenv('JNPR_DATABASE_AUTH_OLD'),
+        "jnpr_database_auth_new": os.getenv('JNPR_DATABASE_AUTH_NEW'),
+    }
     for device in device_connections:
         # print(device)
         isis_neighbor_data = load_yaml_file(path=f"tests/test_isis_neighbor/isis_data/{device['host']}_isis_neighbors.yaml")
